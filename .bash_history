@@ -57,3 +57,18 @@ git push -u origin master
 git remote rename origin upstream
 git remote add origin https://github.com/SrbModi/test1.git
 git push origin master
+ls
+cd certificates/
+~/dehydrated/dehydrated --cron --domain www.medifudo.com --out ~/certificates --challenge http-01
+/home/Srb1403/dehydrated/dehydrated --register --accept-terms
+~/dehydrated/dehydrated --cron --domain www.medifudo.com --out ~/certificates --challenge http-01
+/home/Srb1403/certificates/dehydrated --register --accept-terms
+/home/Srb1403/certificates/ --register --accept-terms
+~/dehydrated/dehydrated --cron --domain www.medifudo.com --out ~/certificates --challenge http-01
+cd ..
+ls
+cd letsencrypt/
+~/dehydrated/dehydrated --cron --domain www.medifudo.com --out ~/letsencrypt --challenge http-01
+/home/Srb1403/dehydrated/dehydrated --register --accept-terms
+~/dehydrated/dehydrated --cron --domain www.medifudo.com --out ~/letsencrypt --challenge http-01
+python -V

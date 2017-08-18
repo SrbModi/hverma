@@ -24,7 +24,7 @@ SECRET_KEY = 'gd8f3pwfc+ysu3v@ti+(xk&s3v)h&5f6&cpwmb+r+4s&mjx@x('
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['www.medifudo.com']
 #ALLOWED_HOSTS = ['srb1403.pythonanywhere.com']
 
 
@@ -133,30 +133,12 @@ STATICFILES_DIRS = [
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR),"static_cdn ")
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR),"media_cdn")
+#MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR),"media_cdn")
+MEDIA_ROOT = os.path.join(BASE_DIR,"media_cdn")
 
-
-
-####### Pay yu payment integration information###################
-
-
-PAYU_INFO = {
-              'merchant_key': "gtKFFx",
-
-             'merchant_salt': "eCwWELxi",
-             # for production environment use 'https://secure.payu.in/_payment'
-             'payment_url': 'https://test.payu.in/_payment',
-             'surl':'http://www.google.com/',
-             'furl':'http://www.fb.com/',
-             'curl':'http://www.geeksforgeeks.com/',
-            }
-
-
-###################End payment info ###############################
-
-
+##############----Email sending information----#############
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'sourabhrocks14@gmail.com'
-EMAIL_HOST_PASSWORD = 'ilxpeypltivzvsya'
+EMAIL_HOST_USER = 'orientalshineherbal@gmail.com'
+EMAIL_HOST_PASSWORD = 'udkjmhgtwlgdosiu'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True

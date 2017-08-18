@@ -170,5 +170,12 @@ html,body{
 
 }
 .item_price{
-	height:
+	height:80px;
+}
+.note{
+    margin:15%;
+}
+.error_note{
+	margin:18%;
+
 }

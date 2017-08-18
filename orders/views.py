@@ -15,6 +15,11 @@ from django.core.exceptions import ObjectDoesNotExist
 from uuid import uuid4
 from uuid import UUID
 import uuid
+from django.core.mail import send_mail
+import urllib.request
+import urllib.parse
+
+
 # from instamojo_wrapper import Instamojo
 # from .util import generate_hash
 
@@ -26,96 +31,102 @@ qty_global = 0
 
 @csrf_exempt
 def addtocart(request,id):
-	if request.user.is_authenticated():
-		user = request.user.username
-		obj1 = login_data.objects.get(user = user)
+    try:
+    	if request.user.is_authenticated():
+    		user = request.user.username
+    		obj1 = login_data.objects.get(user = user)
 
-		if cart.objects.filter(user=user).filter(prod_id=id):
-			obj2 = cart.objects.get(prod_id = id,user=user)
-			obj2.qty += int(request.POST.get("qty"))
-			obj2.save()
-		else:
-			obj2 = products.objects.get(prod_id = id)
-			cart.objects.create(user = user,
-				contact = obj1.contact,
-				email = obj1.email,
-				prod_name = obj2.prod_name,
-				prod_id = obj2.prod_id,
-				price = obj2.price,
-				image = obj2.image.url,
-				qty = request.POST.get("qty")
-				)
-		str1 = '/product/' + str(id) + '/'
+    		if cart.objects.filter(user=user).filter(prod_id=id):
+    			obj2 = cart.objects.get(prod_id = id,user=user)
+    			obj2.qty += int(request.POST.get("qty"))
+    			obj2.save()
+    		else:
+    			obj2 = products.objects.get(prod_id = id)
+    			cart.objects.create(user = user,
+    				contact = obj1.contact,
+    				email = obj1.email,
+    				prod_name = obj2.prod_name,
+    				prod_id = obj2.prod_id,
+    				price = obj2.price,
+    				image = obj2.image.url,
+    				qty = request.POST.get("qty")
+    				)
+    		str1 = '/product/' + str(id) + '/'
 
 
-		return HttpResponseRedirect(str1,{'message':'prdocut added to cart !'})
-	else:
-		return HttpResponseRedirect('/signin/')
+    		return HttpResponseRedirect(str1,{'message':'prdouct added to cart !'})
+    	else:
+    		return HttpResponseRedirect('/signin/')
+    except:
+        return render(request,"error_page.html",{})
 
 
 
 def cartlist(request):
-	if request.user.is_authenticated():
-		str1 = ' '
-		total = 0
+    try:
+    	if request.user.is_authenticated():
+    		str1 = ' '
+    		total = 0
 
-		user = request.user.username
-		for obj1 in cart.objects.filter(user=user):
-			obj2 = products.objects.get(prod_id = obj1.prod_id)
+    		user = request.user.username
+    		for obj1 in cart.objects.filter(user=user):
+    			obj2 = products.objects.get(prod_id = obj1.prod_id)
 
-			str1 +='<form  method="POST" action="http://srb1403.pythonanywhere.com/updatecart/change/'
-			str1 += str(obj1.prod_id) + '/"><td>'
+    			str1 +='<form  method="POST" action="http://srb1403.pythonanywhere.com/updatecart/change/'
+    			str1 += str(obj1.prod_id) + '/"><td>'
 
-			str1 += '<tr><td><img src="'
-			str1 += str(obj2.image.url)
-			str1 += '" style="width:100px; height:100px; margin-left:20%;" ></td><td>'
-			str1 += str(obj2.prod_name)
-			str1 += '</td><td>'
-			str1 += str(obj2.price)
-			price = float(obj2.price)
-			price = round(price,2)
-			str1 += '</td><td>'
+    			str1 += '<tr><td><img src="'
+    			str1 += str(obj2.image.url)
+    			str1 += '" style="width:100px; height:100px; margin-left:20%;" ></td><td>'
+    			str1 += str(obj2.prod_name)
+    			str1 += '</td><td>'
+    			str1 += str(obj2.price)
+    			price = float(obj2.price)
+    			price = round(price,2)
+    			str1 += '</td><td>'
 
-			str1 += str(obj2.offer) + '%'
-			disc = float(price*obj2.offer/100)
-			disc = round(disc,2)
-			print(disc)
-			str1 += '</td><td>'
-			rate = float(obj2.price-disc)
-			rate = round(rate,2)
-			str1 += str(rate)
-			str1 += '</td><td>'
-			str1 += '<input type="number" id="quantity" class="form-control"  min="1" style="width:70px;"'
-			str1 += ' value="'
-			str1 += str(obj1.qty)
-			qty = int(obj1.qty)
-			str1 += '" name="qty"></td>'
+    			str1 += str(obj2.offer) + '%'
+    			disc = float(price*obj2.offer/100)
+    			disc = round(disc,2)
+    			print(disc)
+    			str1 += '</td><td>'
+    			rate = float(obj2.price-disc)
+    			rate = round(rate,2)
+    			str1 += str(rate)
+    			str1 += '</td><td>'
+    			str1 += '<input type="number" id="quantity" class="form-control"  min="1" style="width:70px;"'
+    			str1 += ' value="'
+    			str1 += str(obj1.qty)
+    			qty = int(obj1.qty)
+    			str1 += '" name="qty"></td>'
 
-			print(request.POST.get("qty"))
-			print(qty_global)
-			# qty = 1
-			# print('quantity = '+qty)
-			pricenew = (rate)*qty
-			pricenew = round(pricenew,2)
-			total += pricenew
-			print(total)
-			str1 +='<td id="total"> '
-			str1 += str(pricenew)
-			str1 += '</td><td>'
-			str1 +='<button type="submit" class = "btn btn-success" >UPDATE</button></td></tr>' #intake quantity change
-			str1 += '</form>'
-		x = str1
+    			print(request.POST.get("qty"))
+    			print(qty_global)
+    			# qty = 1
+    			# print('quantity = '+qty)
+    			pricenew = (rate)*qty
+    			pricenew = round(pricenew,2)
+    			total += pricenew
+    			print(total)
+    			str1 +='<td id="total"> '
+    			str1 += str(pricenew)
+    			str1 += '</td><td>'
+    			str1 +='<button type="submit" class = "btn btn-success" >UPDATE</button></td></tr>' #intake quantity change
+    			str1 += '</form>'
+    		x = str1
 
-		str1 = ' '
+    		str1 = ' '
 
-		amount_total = round(total,2)
-		shipping_total = shipping_charge()  #----  define a function for shipping charges
-		grand_total = amount_total + shipping_total
-		print (grandtotal(user))
-		return render(request,"cart.html",{"data":x,"a_total":amount_total,
-			"s_total":shipping_total,"g_total":grand_total})
-	else:
-		return HttpResponseRedirect('/signin/')
+    		amount_total = round(total,2)
+    		shipping_total = shipping_charge()  #----  define a function for shipping charges
+    		grand_total = amount_total + shipping_total
+    		print (grandtotal(user))
+    		return render(request,"cart.html",{"data":x,"a_total":amount_total,
+    			"s_total":shipping_total,"g_total":grand_total})
+    	else:
+    		return HttpResponseRedirect('/signin/')
+    except:
+        return render(request,"error_page.html",{})
 
 
 @csrf_exempt
@@ -126,28 +137,35 @@ def change_qty(request):
 
 @csrf_exempt
 def updatecart(request,id):
-	user = request.user.username
-	obj1 = cart.objects.get(user=user,prod_id=id)
-	print(obj1.qty)
-	obj1.qty = request.POST.get("qty")
-	print(obj1.qty)
-	obj1.save()
-	return HttpResponseRedirect('/cart/')
+    try:
+    	user = request.user.username
+    	obj1 = cart.objects.get(user=user,prod_id=id)
+    	print(obj1.qty)
+    	obj1.qty = request.POST.get("qty")
+    	print(obj1.qty)
+    	obj1.save()
+    	return HttpResponseRedirect('/cart/')
+    except:
+        return render(request,"error_page.html",{})
 
 def totalamt(user):
-	total = float(0)
+    try:
+    	total = float(0)
 
-	for o in cart.objects.all():
-		if o.user == user :
-			temp = products.objects.get(prod_id = o.prod_id )
-			price = o.price
-			offer = temp.offer
-			rate = price - (price*offer/100)
-			print("rate = " + str(rate))
-			total += float(rate*o.qty)
-			total = round(total,2)
+    	for o in cart.objects.all():
+    		if o.user == user :
+    			temp = products.objects.get(prod_id = o.prod_id )
+    			price = o.price
+    			offer = temp.offer
+    			rate = price - (price*offer/100)
+    			print("rate = " + str(rate))
+    			total += float(rate*o.qty)
+    			total = round(total,2)
 
-	return total
+    	return total
+    except:
+        return HttpResponseRedirect('/error/')
+
 
 def shipping_charge():
 	return (250)
@@ -156,27 +174,32 @@ def grandtotal(user):
 	return totalamt(user) + shipping_charge()
 
 def checkout(request):
-	context = {}
-	context["user"] = request.user.username
-	obj = login_data.objects.get(user=request.user.username)
-	context["email"] = obj.email
-	context["contact"] = obj.contact
-	context["address"] = obj.address
-	return render(request,"checkout.html",context)
+    try:
+    	context = {}
+    	context["user"] = request.user.username
+    	obj = login_data.objects.get(user=request.user.username)
+    	context["email"] = obj.email
+    	context["contact"] = obj.contact
+    	context["address"] = obj.address
+    	return render(request,"checkout.html",context)
+    except:
+        return render(request,"error_page.html",{})
 
 
 def topayment(request):
-	order_delivery.objects.create(
-		user = request.POST.get("user"),
-		#order_id = request.POST.get("user"),
-		email = request.POST.get("email"),
-		address = request.POST.get("address"),
-		landmark = request.POST.get("landmark"),
-		city = request.POST.get("city"),
-		state = request.POST.get("state"),
-		pincode = request.POST.get("pincode")
-		)
-	return render(request,"checkout.html",{})
+    try:
+    	order_delivery.objects.create(
+    		user = request.POST.get("user"),
+    		email = request.POST.get("email"),
+    		address = request.POST.get("address"),
+    		landmark = request.POST.get("landmark"),
+    		city = request.POST.get("city"),
+    		state = request.POST.get("state"),
+    		pincode = request.POST.get("pincode")
+    		)
+    	return render(request,"checkout.html",{})
+    except:
+        return render(request,"error_page.html",{})
 
 # def test1(request):
 # 	MERCHANT_KEY = "gtKFFx"
@@ -235,20 +258,23 @@ def topayment(request):
 
 
 def func(request):
-	context = {}
-	username = request.user.username
-	obj1 = login_data.objects.get(user = username)
-	context["user"] = username
-	context["productinfo"] = "product"
-	context["firstname"] = username
-	amount = grandtotal(username)
-	amount = round(amount,2)
-	context["amount"] = amount
-	email = str(obj1.email)
-	context["email"] = email
-	context["phone"] = obj1.contact
+    try:
+    	context = {}
+    	username = request.user.username
+    	obj1 = login_data.objects.get(user = username)
+    	context["user"] = username
+    	context["productinfo"] = "product"
+    	context["firstname"] = username
+    	amount = grandtotal(username)
+    	amount = round(amount,2)
+    	context["amount"] = amount
+    	email = str(obj1.email)
+    	context["email"] = email
+    	context["phone"] = obj1.contact
 
-	return render(request,"checkout.html",context)
+    	return render(request,"checkout.html",context)
+    except:
+        return render(request,"error_page.html",{})
 
 
 
@@ -330,65 +356,107 @@ def func(request):
 
 ###########################-----REDIRECT FROM CHECKOUT TO THANK YOU PAGE-----###########################
 
-
 @csrf_exempt
 def thankyou(request):
-# 	try:
-	username = request.POST.get("user")
-	for o in cart.objects.filter(user=username):
-		obj = products.objects.get(prod_id=o.prod_id)
-		order_content.objects.create(
-			user = username,
-			prod_name = o.prod_name,
-			prod_id = o.prod_id,
-			price = o.price,
-			qty = o.qty,
-			offer = obj.offer
-			)
-	print("1");
-	order_delivery.objects.create(
-		user = request.POST.get("user"),
-		email = request.POST.get("email"),
-		address = request.POST.get("address"),
-		landmark = request.POST.get("landmark"),
-		city = request.POST.get("city"),
-		state = request.POST.get("state"),
-		pincode = request.POST.get("pincode")
-		)
-
-	msg = """Hello Admin.
-	The  user - %s has placed an order. Please visit the admin panel and check the order under "Order Content" for order details and "Order Delivery" for details of delivery
-	Contact details of user:
-	Name : %s
-	Contact : %s
-	Email : %s
-	city : %s
-
-
-	Follow the link
-	Order Contents : http://srb1403.pythonanywhere.com/admin/orders/order_content/
-	Order Delivery : http://srb1403.pythonanywhere.com/admin/orders/order_delivery/
+    try:
+    	username = request.user.username
+    	msgcont = """A new order is placed on medifudo.com
+    	"""
+    	for o in cart.objects.filter(user=username):
+    		obj = products.objects.get(prod_id=o.prod_id)
+    		order_content.objects.create(
+    			user = request.POST.get("user"),
+    			prod_name = o.prod_name,
+    			prod_id = o.prod_id,
+    			price = o.price,
+    			qty = o.qty,
+    			offer = obj.offer
+    			)
+    		msgcont += str(o.prod_name) + " - " + str(o.qty) + ", "
+    	print("1");
+    	order_delivery.objects.create(
+    		user = request.POST.get("user"),
+    # 		email = request.POST.get("email"),
+    		address = request.POST.get("address"),
+    		landmark = request.POST.get("landmark"),
+    		city = request.POST.get("city"),
+    		state = request.POST.get("state"),
+    		pincode = request.POST.get("pincode")
+    		)
+    	email=str(request.POST.get("email"))
+    	msg = """Hello Admin.
+    	The  user - %s has placed an order. Please visit the admin panel and check the order under "Order Content" for order details and "Order Delivery" for details of delivery
+    	Contact details of user:
+    	Name : %s
+    	Contact : %s
+    	Email : %s
+    	city : %s
 
 
-	Thank You. Have A great Day.
-	"""
-	send_mail(
-			"New Order from MediFudo.com",
-			msg %(username,username,request.POST.get("contact"),request.POST.get("email"),request.POST.get("city")),
-			'sourabhrocks14@gmail.com',
-			[str(email)],
-			fail_silently=False,
-			)
+    	Follow the link
+    	Order Contents : http://www.medifudo.com/admin/orders/order_content/
+    	Order Delivery : http://www.medifudo.com/admin/orders/order_delivery/
 
-	context = {}
-	context["message"] = "Thank You. You will soon be contacted by our representative."
 
-	return render(request,"thankyou.html",context)
+    	Thank You. Have A great Day.
+    	"""
+    	send_mail(
+    		"New Order from MediFudo.com",
+    		msg %(username,username,request.POST.get("contact"),request.POST.get("email"),request.POST.get("city")),
+    		'sourabhrocks14@gmail.com',
+    		[str(email)],
+    		fail_silently=False,
+    		)
+
+    # 	msgcont = "an order for the following products is placed from medifudo.com:"
+    # 	for o in cart.objects.filter(user=username):
+    # 	    msgcont += str(prod_name) + " - " + str(qty) + ', '
+    	msgcont += "customer contact - " + str(request.POST.get("phone")) + ", city - " + str(request.POST.get("city")) +". Thank You."
+
+        # authkey = "169989A6P19i4TGv5992a1f5"
+
+    	mobiles = "9039189251" # Multiple mobiles numbers separated by comma. #str(request.POST.get("phone")
+    	message = msgcont
+    	authkey = "169989A6P19i4TGv5992a1f5"
+
+    	sender = "MEDIFU"
+
+    	route = "4"
+
+    	values = {'authkey' : authkey, 'mobiles' : mobiles, 'message' : message, 'sender' : sender, 'route' : route}
+
+    	url = "https://control.msg91.com/api/sendhttp.php"
+
+    	postdata = urllib.parse.urlencode(values)
+
+    	data = postdata.encode('utf-8')
+
+
+    	req = urllib.request.Request(url, data)
+
+    	response = urllib.request.urlopen(req)
+
+    	output = response.read()
+
+    	print (output)
+
+
+
+        ######-----SMS notification done-----#####
+    	context = {}
+    	context["message"] = "Thank You. You will soon be contacted by our representative."
+
+    	return render(request,"thankyou.html",context)
+    except:
+        return render(request,"error_page.html",{})
 # 	except Exception as e:
 # 	    print (str(e))
 # 	    context = {}
 # 	    context["message"] = "Sorry. We were unale to process your request due to some internal error.Please try again"
 # 	    return render(request,"thankyou.html",context)
+
+
+
 
 
 

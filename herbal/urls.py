@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 from login.views import *
 from adminpanel.views import home,blog,faqs,prod,sub_query,dealer_cont,customer_cont,seller_cont,sub_query,welcome, aboutus,contact_cust,contact_dealer,contact_seller
 from orders.views import addtocart,cartlist,updatecart,checkout,topayment, func, thankyou
-from adminpanel.views import home,blog,faqs,prod,sub_query,dealer_cont,customer_cont,seller_cont,sub_query,welcome
+from adminpanel.views import home,blog,faqs,prod,sub_query,dealer_cont,customer_cont,seller_cont,sub_query,welcome, error
 from orders.views import addtocart,cartlist,updatecart,checkout,topayment, func
 from orders.views import addtocart,cartlist,updatecart,checkout,topayment, func,thankyou
 from django.contrib.admin import *
@@ -57,6 +57,7 @@ urlpatterns = [
     url(r'^otp/em/',accept_otp),
     url(r'^reset_password/',reset_pass),
     url(r'^thankyou/',thankyou),
+    url(r'^error/',error),
 
     # url(r'^404/$', django.views.defaults.page_not_found),
 ]
