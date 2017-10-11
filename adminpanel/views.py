@@ -47,13 +47,13 @@ def home(request):
     		str1 += '<div class="col-xs-2"><a href="#x" class="thumbnail"><img src="'
     		str1 += str(o.image.url)
     		str1 += '" alt="Image" style="max-width:100%;"></a>'
-    		str1 += '<div><div class="text-center"><a class = "text-uppercase" style="text-decoration:none; color:black; font-size:18px;width:100%; margin-top:20%;" href="'
+    		str1 += '<div><div class="text-center"><div class="item_name"><a class = "text-uppercase" style="text-decoration:none; color:black; font-size:18px;width:100%; margin-top:20%;" href="'
     		str1 += url + 'product/' + str(o.prod_id) + '/'
     		str1 += '">'
     		str1 += str(o.prod_name)
-    		str1 +='</a><br><br><p class="text-uppercase item-desc" style="font-size:12px;">'
+    		str1 +='</a></div><p class="text-uppercase item-desc" style="font-size:12px;">'
     		str1 += str(o.short_desc)
-    		str1 += '</p></div><div class="text-center" style="font-size:18px; border-top: dashed 1px; border-bottom: dashed 1px;padding-top:5%;">'
+    		str1 += '</p></div><div class="text-center item_price" style="font-size:18px; border-top: dashed 1px; border-bottom: dashed 1px;padding-top:5%;">'
     		str1 += '<p>'
     		if o.offer == 0:
     			str1 += '<span style="color:black;margin:2%;font-size:19px">'
@@ -92,13 +92,13 @@ def home(request):
     		str1 += '<div class="col-xs-2"><a href="#x" class="thumbnail"><img src="'
     		str1 += str(o.image.url)
     		str1 += '" alt="Image" style="max-width:100%;"></a>'
-    		str1 += '<div><div class="text-center"><a class = "text-uppercase" style="text-decoration:none; color:black; font-size:18px;" href="'
+    		str1 += '<div><div class="text-center"><div class="item_name"><a class = "text-uppercase" style="text-decoration:none; color:black; font-size:18px;" href="'
     		str1 += url + 'product/' + str(o.prod_id) + '/'
     		str1 += '">'
     		str1 += str(o.prod_name)
-    		str1 +='</a><br><br><p class="text-uppercase" style="font-size:12px;">'
+    		str1 +='</a></div><p class="text-uppercase item-desc" style="font-size:12px;">'
     		str1 += str(o.short_desc)
-    		str1 += '</p></div><div class="text-center" style="font-size:18px; border-top: dashed 1px; border-bottom: dashed 1px;padding-top:5%;">'
+    		str1 += '</p></div><div class="text-center item_price" style="font-size:18px; border-top: dashed 1px; border-bottom: dashed 1px;padding-top:5%;">'
     		str1 += '<p>'
     		if o.offer == 0:
     			str1 += '<span style="color:black;margin:2%;font-size:19px">'

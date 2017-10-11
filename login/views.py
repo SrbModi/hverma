@@ -113,7 +113,7 @@ def forgotpass(request):
 
     			Team Medifudo.
 
-    			For any queries, contact 1800-121-2200 or drop us an email at help@medifudo.com
+    			For any queries, contact 89660-76104 or drop us an email at orientalshineherbal@gmail.com
 
     			Note: This is an auto-generated email. Please do not reply back to it.
     			"""
@@ -124,7 +124,7 @@ def forgotpass(request):
     			send_mail(
     				"One-Time Code for MediFudo",
     				msg %(user,otp),
-    				'sourabhrocks14@gmail.com',
+    				'orientalshineherbal@gmail.com',
     				[str(email)],
     				fail_silently=False,
     				)
@@ -133,7 +133,7 @@ def forgotpass(request):
     			return render(request,"otp.html",context)
     			# return HttpResponseRedirect('/otp/em/')
     		else:
-    			print("sourabh")
+    			print("check")
     			return render(request,"forgot-password.html")
     except:
         return render(request,"error_page.html",{})

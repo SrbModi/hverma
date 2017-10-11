@@ -138,7 +138,7 @@ html,body{
 }
 .about>img{
 	width:auto;
-	height:200px;
+	height:300px;
 }
 .panel,.panel-default{
 	border: 0;
@@ -163,6 +163,7 @@ html,body{
 .item-desc{
 	height:50px;
 	overflow:hidden;
+
 }
 .item_name{
 	height:50px;

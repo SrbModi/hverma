@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 
 
-#cons = consult for constraints with the front-end 
+#cons = consult for constraints with the front-end
 #validation on fron-end???
 class imageslider(models.Model):
 	image = models.ImageField(null=True,blank=True)
@@ -12,7 +12,7 @@ class products(models.Model):
 	section = models.CharField(max_length=256) #cons
 	prod_name = models.CharField(max_length=25) #cons
 	prod_id = models.IntegerField()
-	short_desc = models.CharField(max_length=40,null = True)
+	short_desc = models.CharField(max_length=100,null = True)
 	desc = models.TextField() #cons - any max_length required?
 	price = models.PositiveIntegerField(null=True)
 	image = models.ImageField(null = True)
@@ -31,7 +31,7 @@ class products(models.Model):
 	Calorific_value = models.CharField(max_length=12,default = 0)
 	Crude_Fibre = models.CharField(max_length=12,default = 0)
 	Sodium = models.CharField(max_length=12,default = 0)
-	
+
 
 class blogs(models.Model):
 	sub_by = models.CharField(max_length=30) #cons

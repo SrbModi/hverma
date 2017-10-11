@@ -72,7 +72,7 @@ def cartlist(request):
     		for obj1 in cart.objects.filter(user=user):
     			obj2 = products.objects.get(prod_id = obj1.prod_id)
 
-    			str1 +='<form  method="POST" action="http://srb1403.pythonanywhere.com/updatecart/change/'
+    			str1 +='<form  method="POST" action="http://www.medifudo.com/updatecart/change/'
     			str1 += str(obj1.prod_id) + '/"><td>'
 
     			str1 += '<tr><td><img src="'
@@ -239,9 +239,9 @@ def topayment(request):
 # 	txnid = "abc123"
 # 	amount = 100.00
 # 	productinfo = "test product"
-# 	firstname = "sourabh"
-# 	email = "sourabh.modi14@gmail.com"
-# 	phone = "9039189251"
+# 	firstname = ""
+# 	email = ""
+# 	phone = ""
 # 	SALT = "eCwWELxi"
 # 	surl = "http://127.0.0.1:8000/welcome/"
 # 	furl = "http://www.google.com/"
@@ -342,7 +342,7 @@ def func(request):
  #    """ % (settings.PAYU_INFO['payment_url'],
  #    	name,
  #    	settings.PAYU_INFO['surl'],
- #    	9039189251,
+ #    	9999999999,
  #    	settings.PAYU_INFO['merchant_key'],
  #    	hash_o,settings.PAYU_INFO['curl'],
  #    	settings.PAYU_INFO['furl'],
@@ -402,20 +402,20 @@ def thankyou(request):
     	"""
     	send_mail(
     		"New Order from MediFudo.com",
-    		msg %(username,username,request.POST.get("contact"),request.POST.get("email"),request.POST.get("city")),
-    		'sourabhrocks14@gmail.com',
-    		[str(email)],
+    		msg %(username,username,request.POST.get("phone"),request.POST.get("email"),request.POST.get("city")),
+    		'orientalshineherbal@gmail.com',
+    		['orientalshineherbal@gmail.com'],
     		fail_silently=False,
     		)
 
     # 	msgcont = "an order for the following products is placed from medifudo.com:"
     # 	for o in cart.objects.filter(user=username):
     # 	    msgcont += str(prod_name) + " - " + str(qty) + ', '
-    	msgcont += "customer contact - " + str(request.POST.get("phone")) + ", city - " + str(request.POST.get("city")) +". Thank You."
+    	msgcont += "customer contact - " + str(request.POST.get("phone")) + ", city - " + str(request.POST.get("city")) +".        Thank You."
 
         # authkey = "169989A6P19i4TGv5992a1f5"
 
-    	mobiles = "9039189251" # Multiple mobiles numbers separated by comma. #str(request.POST.get("phone")
+    	mobiles = "8966076104" # Multiple mobiles numbers separated by comma. #str(request.POST.get("phone")
     	message = msgcont
     	authkey = "169989A6P19i4TGv5992a1f5"
 
@@ -449,6 +449,9 @@ def thankyou(request):
     	return render(request,"thankyou.html",context)
     except:
         return render(request,"error_page.html",{})
+
+
+
 # 	except Exception as e:
 # 	    print (str(e))
 # 	    context = {}
@@ -505,7 +508,7 @@ def thankyou(request):
 # 		send_mail(
 # 				"New Order from MediFudo.com",
 # 				msg %(username,username,request.POST.get("contact"),request.POST.get("email"),request.POST.get("city")),
-# 				'sourabhrocks14@gmail.com',
+# 				'',
 # 				[str(email)],
 # 				fail_silently=False,
 # 				)

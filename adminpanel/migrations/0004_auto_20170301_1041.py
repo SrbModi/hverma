@@ -55,7 +55,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='products',
             name='short_desc',
-            field=models.CharField(max_length=40, null=True),
+            field=models.CharField(max_length=100, null=True),
         ),
         migrations.AlterField(
             model_name='products',
